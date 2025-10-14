@@ -2,9 +2,9 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
-users = [{"id":1, "nom":"Pau"}]
+users = [{"id":1, "nom":"Pau"},{"id":2, "nom":"SuPou"},]
 
-@app.post("/api/users", response_model=dict)
+@app.post("/api/users")
 async def insert_user():
     return {"user":"Pau"}
 
@@ -14,4 +14,4 @@ async def get_user():
 
 @app.get("/api/users", response_model=dict)
 async def get_users():
-    return{""}
+    return{"users":users}
