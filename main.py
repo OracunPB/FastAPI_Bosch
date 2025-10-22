@@ -2,6 +2,11 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
+load_dotenv()
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+engine = create_engine()
+
 users = [
     {"id":1, "nom":"Pau", "edat": "30"},
     {"id":2, "nom":"Mireia", "edat": "29"},
@@ -35,3 +40,26 @@ async def update_user(id:int, canvis: dict):
 async def delete_user(id: int):
     users.pop(id-1)
     return {"users": users}
+
+def get_db():
+    db = Session(engine)
+    try:
+        yield db
+    finally:
+        db.close()
+
+@app.post("/user", response_model=dict, tags=["CREATE"])
+def addUser(user: UserRequest, db:Session = Depends(get_db)):
+    insert_user = User.model_validate(user)
+    db.add(insert_user)
+    db.commit()
+    return {"msg":"Afegit usuari correctament"}
+
+
+@app.get("/user/{id}", response_model=UserResponse, tags=["READ by ID"])
+def getUser(id: int, db:Session = Depends(get_db)):
+    stmt = select(User).where(User.id == id)
+    result = db.exec(stmt).first()
+    print(result) #pa ver lo que se printa
+    return UserResponse.model_validate(result)
+
