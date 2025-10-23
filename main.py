@@ -7,19 +7,13 @@ load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine()
 
-users = [
-    {"id":1, "nom":"Pau", "edat": "30"},
-    {"id":2, "nom":"Mireia", "edat": "29"},
-    {"id":3, "nom":"Sergi", "edat": "30"}
-]
-
 #1 Crear - Afegir a la list
-@app.post("/api/users")
-async def insert_user(user: dict):
-    users.append(user)
-    return {"user":users}
+@app.post("/api/products")
+async def insert_product(product: dict):
+    products.append(product)
+    return {"product":products}
 
-#2 Llegir - Consultar un usuari / objecte de la llista
+#2 Llegir - Consultar un producte de la llista
 @app.get("/api/users/{id}")
 async def get_user(id: int):
     return{"user":users[id - 1]}
