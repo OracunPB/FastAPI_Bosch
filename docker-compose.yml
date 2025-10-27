@@ -10,7 +10,7 @@ services:
    ports:
      - "5432:5432"
    volumes:
-     - local_pgdata:/var/lib/postgresql/data
+     - local_pgdata:/var/lib/postgresql
  pgadmin:
    image: dpage/pgadmin4
    container_name: pg_fastapi
