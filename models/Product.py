@@ -18,3 +18,10 @@ class ProductStock(SQLModel): #Mostra únicament el stock d'un producte
     name: str
     stock: int
     category: str
+
+class ProductUpdate(SQLModel): #Editar un producte sense veure ID
+    name: str
+    price: int
+    category: str
+    stock: int
+    sale: bool
