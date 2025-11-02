@@ -1,6 +1,7 @@
 from fastapi import FastAPI
-from sqlmodel import SQLModel, create_engine, Session
+from sqlmodel import SQLModel, create_engine, Session, select
 from fastapi.middleware.cors import CORSMiddleware
+from models.Product import Product, ProductRequest, ProductStock
 from dotenv import load_dotenv
 import os
 
@@ -29,3 +30,18 @@ def get_db():
     finally:
         db.close()
 
+# Create - Afegir un nou registre a la taula
+@app.post("/api/product")
+def create_product(product: Product):
+    with Session(engine) as db:
+        db.add(product)
+        db.commit()
+        db.refresh(product)
+        return {"message": "Producte afegit correctament"}
+    
+# Read - Consultar totes les dades d’UN registre a la taula.
+@app.get("/api/product/{id}")
+def get_product_by_id(id: int):
+    with Session(engine) as db:
+        product = db.get(Product, id)
+        return product
